@@ -1,1 +1,432 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/portafolios/Denyer.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet"><meta name="description" content="Web site created using create-react-app"/><link rel="apple-touch-icon" href="/portafolios/logo192.png"/><link rel="manifest" href="/portafolios/manifest.json"/><title>Denyer Bastidas</title><script defer="defer" src="/portafolios/static/js/main.4deb06e6.js"></script><link href="/portafolios/static/css/main.1c5fbda1.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Denyer Bastidas — Full Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo"><img class="logo" src="logo.png" alt=""></div>
+  <div class="loader-bar-wrap"><div class="loader-bar" id="lbar"></div></div>
+  <div class="loader-pct" id="lpct">0%</div>
+</div>
+
+<!-- NOISE -->
+<div class="noise"></div>
+
+
+<!-- VIDEO DE FONDO (reemplaza el canvas 3D) -->
+<video id="bgVideo" autoplay muted loop playsinline>
+  <source src="video.mp4" type="video/mp4">
+  <!-- Fallback: si quieres un video de ejemplo online, usa este mientras -->
+  <!-- <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-particles-flowing-in-dark-1287-large.mp4" type="video/mp4"> -->
+</video>
+
+<!-- 3D CANVAS (lo puedes eliminar o dejar comentado) -->
+ <canvas id="c3d"></canvas>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+<div id="cur-text"></div>
+
+<!-- SIDE ELEMENTS -->
+<div class="side-email">
+  <a href="mailto:dbastidas00@gmail.com">dbastidas00@gmail.com</a>
+</div>
+<div class="side-socials">
+  <a href="https://github.com/Magister0003" target="_blank" class="s-icon" title="GitHub">
+    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+  </a>
+  <a href="https://api.whatsapp.com/send?phone=3161411928" target="_blank" class="s-icon" title="WhatsApp">
+    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-brand" href="#hero">
+    <div class="nav-brand-mark"><img class="logo" src="logo.png" alt=""></div>
+    <span class="nav-brand-name">DENYER BASTIDAS</span>
+  </a>
+<div class="nav-center">
+  <a class="nav-link" href="#about">Sobre mí</a>
+  <a class="nav-link" href="#skills">Stack</a>
+  <a class="nav-link" href="#projects">Proyectos</a>
+  <a class="nav-link" href="#certs">Certs</a>
+  <a class="nav-link" href="#contact">Contacto</a>
+</div>
+
+  <div class="nav-right">
+    <div class="nav-status"><div class="status-dot"></div>Disponible</div>
+    <a href="#contact" class="nav-cta">Contratar</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span class="hero-eyebrow-text">Full Stack Developer · Venezuela</span>
+      </div>
+      <h1 class="hero-name">
+        <span class="n1">DENYER</span>
+        <span class="n2">BASTIDAS</span>
+      </h1>
+      <p class="hero-role">
+        Construyo <strong>experiencias digitales de alto impacto</strong>.<br>
+        Desde bases de datos hasta interfaces 3D — código limpio, diseño preciso.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn-primary">
+          Ver proyectos
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="https://github.com/Magister0003" target="_blank" class="btn-ghost">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <!--<div class="hero-card">
+          <div class="avatar-container">
+            <img class="avatar" src="yo.png" alt="Denyer Bastidas">
+          </div>
+        <div class="hc-label">Stack actual</div>
+        <div class="hc-stack">
+          <span class="hc-tag">React</span><span class="hc-tag">Vue</span><span class="hc-tag">TypeScript</span>
+          <span class="hc-tag">Python</span><span class="hc-tag">PHP</span><span class="hc-tag">Java</span>
+          <span class="hc-tag">Flutter</span><span class="hc-tag">C++</span><span class="hc-tag">SQL</span>
+        </div>
+        <div class="hc-divider"></div>
+        <div class="hc-stats">
+          <div class="hc-center-text">
+            <div class="hc-stat-num c">7+</div>
+            <div class="hc-stat-label">Proyectos</div>
+          </div>
+          <div class="hc-center-text">
+            <div class="hc-stat-num v">15+</div>
+            <div class="hc-stat-label">Tecnologías</div>
+          </div>
+          <div class="hc-center-text">
+            <div class="hc-stat-num c">4</div>
+            <div class="hc-stat-label">Certs</div>
+          </div>
+          <div class="hc-center-text">
+            <div class="hc-stat-num v">100%</div>
+            <div class="hc-stat-label">Dedicación</div>
+          </div>
+        </div>
+      </div>-->
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <div class="scroll-wheel"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">React</span>
+    <span class="marquee-item">TypeScript</span>
+    <span class="marquee-item">Vue.js</span>
+    <span class="marquee-item">Python</span>
+    <span class="marquee-item">Flutter</span>
+    <span class="marquee-item">PHP</span>
+    <span class="marquee-item">Java</span>
+    <span class="marquee-item">C++</span>
+    <span class="marquee-item">MySQL</span>
+    <span class="marquee-item">Dart</span>
+    <span class="marquee-item">Git</span>
+    <span class="marquee-item">Bootstrap</span>
+    <span class="marquee-item">CSS3</span>
+    <span class="marquee-item">HTML5</span>
+    <!-- dupe for seamless loop -->
+    <span class="marquee-item">React</span>
+    <span class="marquee-item">TypeScript</span>
+    <span class="marquee-item">Vue.js</span>
+    <span class="marquee-item">Python</span>
+    <span class="marquee-item">Flutter</span>
+    <span class="marquee-item">PHP</span>
+    <span class="marquee-item">Java</span>
+    <span class="marquee-item">C++</span>
+    <span class="marquee-item">MySQL</span>
+    <span class="marquee-item">Dart</span>
+    <span class="marquee-item">Git</span>
+    <span class="marquee-item">Bootstrap</span>
+    <span class="marquee-item">CSS3</span>
+    <span class="marquee-item">HTML5</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="inner">
+
+  
+    <div class="about-body rv rv-d2">
+        <div class="s-label rv">01 — Sobre mí</div>
+  <h2 class="s-title rv rv-d1">Código que<br><em>importa</em></h2>
+      <p class="about-copy">Soy un <strong>desarrollador Full Stack</strong> apasionado por transformar ideas en productos digitales reales. Domino el ciclo completo de desarrollo — desde el diseño de arquitecturas de base de datos hasta la última animación de la interfaz.</p>
+      <p class="about-copy">Mi enfoque combina precisión técnica con sensibilidad de diseño. No solo escribo código que funciona: construyo sistemas que <strong>escalan, se mantienen y se sienten excepcionales</strong>.</p>
+      <blockquote class="about-quote">"Cada línea de código es una decisión de diseño.<br>Cada decisión de diseño es un compromiso con el usuario."</blockquote>
+      <div class="about-pills">
+        <span class="pill">Frontend</span><span class="pill">Backend</span><span class="pill">Mobile</span>
+        <span class="pill">UI/UX</span><span class="pill">Bases de Datos</span><span class="pill">APIs REST</span>
+        <span class="pill">Control de versiones</span><span class="pill">Responsive Design</span>
+      </div>
+    </div>
+    <div class="about-metrics rv rv-d3">
+      <div class="hero-card">
+
+          <div class="avatar-container">
+            <img class="avatar" src="yo.png" alt="Denyer Bastidas">
+          </div>
+        <div class="hc-label">Stack actual</div>
+        <div class="hc-stack">
+          <span class="hc-tag">React</span><span class="hc-tag">Vue</span><span class="hc-tag">TypeScript</span>
+          <span class="hc-tag">Python</span><span class="hc-tag">PHP</span><span class="hc-tag">Java</span>
+          <span class="hc-tag">Flutter</span><span class="hc-tag">C++</span><span class="hc-tag">SQL</span>
+        </div>
+        <div class="metric-bar" data-w="100%"></div>
+      </div>
+      <div class="metric">
+        <div class="metric-num">7+</div>
+        <div class="metric-info">
+          <div class="metric-name">Proyectos completados</div>
+          <div class="metric-sub">Desde webs estáticas hasta apps full stack</div>
+        </div>
+        <div class="metric-bar" data-w="75%"></div>
+      </div>
+      <div class="metric">
+        <div class="metric-num">15+</div>
+        <div class="metric-info">
+          <div class="metric-name">Tecnologías dominadas</div>
+          <div class="metric-sub">Frontend, backend, mobile y datos</div>
+        </div>
+        <div class="metric-bar" data-w="90%"></div>
+      </div>
+      <div class="metric">
+        <div class="metric-num">4</div>
+        <div class="metric-info">
+          <div class="metric-name">Certificaciones</div>
+          <div class="metric-sub">HTML, CSS, JavaScript, Bootstrap</div>
+        </div>
+        <div class="metric-bar" data-w="60%"></div>
+      </div>
+      <div class="metric">
+        <div class="metric-num">∞</div>
+        <div class="metric-info">
+          <div class="metric-name">Curiosidad técnica</div>
+          <div class="metric-sub">Siempre aprendiendo, siempre construyendo</div>
+        </div>
+        <div class="metric-bar" data-w="100%"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="section">
+  <div class="s-label rv">02 — Stack técnico</div>
+  <h2 class="s-title rv rv-d1">Mis <em>armas</em></h2>
+  <div class="rv rv-d2">
+    <div class="skills-tabs">
+      <div class="stab active" data-tab="frontend">Frontend</div>
+      <div class="stab" data-tab="backend">Backend</div>
+      <div class="stab" data-tab="mobile">Mobile</div>
+      <div class="stab" data-tab="datos">Datos & Tools</div>
+    </div>
+    <div class="skills-panel active" id="panel-frontend">
+      <div class="sk-card"><span class="sk-icon">🌐</span><div class="sk-name">HTML5</div><div class="sk-level">AVANZADO</div><div class="sk-bar"><div class="sk-fill" data-w="92%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">🎨</span><div class="sk-name">CSS3</div><div class="sk-level">AVANZADO</div><div class="sk-bar"><div class="sk-fill" data-w="88%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">⚡</span><div class="sk-name">JavaScript</div><div class="sk-level">AVANZADO</div><div class="sk-bar"><div class="sk-fill" data-w="84%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">🔷</span><div class="sk-name">TypeScript</div><div class="sk-level">INTERMEDIO</div><div class="sk-bar"><div class="sk-fill" data-w="70%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">⚛️</span><div class="sk-name">React</div><div class="sk-level">AVANZADO</div><div class="sk-bar"><div class="sk-fill" data-w="80%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">💚</span><div class="sk-name">Vue.js</div><div class="sk-level">INTERMEDIO</div><div class="sk-bar"><div class="sk-fill" data-w="65%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">🅱️</span><div class="sk-name">Bootstrap</div><div class="sk-level">AVANZADO</div><div class="sk-bar"><div class="sk-fill" data-w="88%"></div></div></div>
+    </div>
+    <div class="skills-panel" id="panel-backend">
+      <div class="sk-card"><span class="sk-icon">🐍</span><div class="sk-name">Python</div><div class="sk-level">INTERMEDIO</div><div class="sk-bar"><div class="sk-fill" data-w="75%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">🐘</span><div class="sk-name">PHP</div><div class="sk-level">INTERMEDIO</div><div class="sk-bar"><div class="sk-fill" data-w="72%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">☕</span><div class="sk-name">Java</div><div class="sk-level">INTERMEDIO</div><div class="sk-bar"><div class="sk-fill" data-w="68%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">⚙️</span><div class="sk-name">C++</div><div class="sk-level">BÁSICO-INTERMEDIO</div><div class="sk-bar"><div class="sk-fill" data-w="58%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">🔗</span><div class="sk-name">APIs REST</div><div class="sk-level">AVANZADO</div><div class="sk-bar"><div class="sk-fill" data-w="80%"></div></div></div>
+    </div>
+    <div class="skills-panel" id="panel-mobile">
+      <div class="sk-card"><span class="sk-icon">🎯</span><div class="sk-name">Dart</div><div class="sk-level">INTERMEDIO</div><div class="sk-bar"><div class="sk-fill" data-w="65%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">📱</span><div class="sk-name">Flutter</div><div class="sk-level">INTERMEDIO</div><div class="sk-bar"><div class="sk-fill" data-w="65%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">🚀</span><div class="sk-name">Apps Multiplataforma</div><div class="sk-level">INTERMEDIO</div><div class="sk-bar"><div class="sk-fill" data-w="60%"></div></div></div>
+    </div>
+    <div class="skills-panel" id="panel-datos">
+      <div class="sk-card"><span class="sk-icon">🗄️</span><div class="sk-name">MySQL</div><div class="sk-level">AVANZADO</div><div class="sk-bar"><div class="sk-fill" data-w="80%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">📊</span><div class="sk-name">Bases de Datos</div><div class="sk-level">INTERMEDIO</div><div class="sk-bar"><div class="sk-fill" data-w="76%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">🐙</span><div class="sk-name">Git & GitHub</div><div class="sk-level">AVANZADO</div><div class="sk-bar"><div class="sk-fill" data-w="82%"></div></div></div>
+      <div class="sk-card"><span class="sk-icon">🌍</span><div class="sk-name">GitHub Pages</div><div class="sk-level">AVANZADO</div><div class="sk-bar"><div class="sk-fill" data-w="85%"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="section">
+  <div class="s-label rv">03 — Proyectos</div>
+  <h2 class="s-title rv rv-d1">Lo que he<br><em>construido</em></h2>
+  <div class="projects-list rv rv-d2">
+    <a href="https://github.com/Magister0003/Perfumeria-Augusto-Caldera.git" target="_blank" class="proj-row" data-label="Ver proyecto">
+      <div class="proj-num">01</div>
+      <div class="proj-body">
+        <div class="proj-category">E-Commerce · Branding</div>
+        <div class="proj-title">Perfumería Augusto Caldera</div>
+        <div class="proj-desc">Sitio web elegante para perfumería con catálogo de productos, identidad visual premium y UX cuidada.</div>
+      </div>
+      <div class="proj-meta">
+        <div class="proj-tags"><span class="proj-tag">HTML</span><span class="proj-tag">CSS</span><span class="proj-tag">JS</span></div>
+        <span class="proj-arrow">↗</span>
+      </div>
+    </a>
+    <a href="https://github.com/Magister0003/Chat-bot.git" target="_blank" class="proj-row" data-label="Ver proyecto">
+      <div class="proj-num">02</div>
+      <div class="proj-body">
+        <div class="proj-category">IA · Conversacional</div>
+        <div class="proj-title">Chat Bot Inteligente</div>
+        <div class="proj-desc">Bot conversacional con interfaz moderna y respuestas dinámicas integradas vía API.</div>
+      </div>
+      <div class="proj-meta">
+        <div class="proj-tags"><span class="proj-tag">React</span><span class="proj-tag">API</span><span class="proj-tag">JS</span></div>
+        <span class="proj-arrow">↗</span>
+      </div>
+    </a>
+    <a href="https://github.com/Magister0003/Gestor-deproyectos.git" target="_blank" class="proj-row" data-label="Ver proyecto">
+      <div class="proj-num">03</div>
+      <div class="proj-body">
+        <div class="proj-category">Productividad · SaaS</div>
+        <div class="proj-title">Gestor de Proyectos</div>
+        <div class="proj-desc">App web para gestión de proyectos con seguimiento de tareas, estados y organización visual.</div>
+      </div>
+      <div class="proj-meta">
+        <div class="proj-tags"><span class="proj-tag">React</span><span class="proj-tag">CSS</span></div>
+        <span class="proj-arrow">↗</span>
+      </div>
+    </a>
+    <a href="https://github.com/Magister0003/Proyecto-en-react.git" target="_blank" class="proj-row" data-label="Ver proyecto">
+      <div class="proj-num">04</div>
+      <div class="proj-body">
+        <div class="proj-category">Frontend · SPA</div>
+        <div class="proj-title">Proyecto en React</div>
+        <div class="proj-desc">SPA moderna en React con componentes reutilizables, estado global y navegación dinámica.</div>
+      </div>
+      <div class="proj-meta">
+        <div class="proj-tags"><span class="proj-tag">React</span><span class="proj-tag">Hooks</span></div>
+        <span class="proj-arrow">↗</span>
+      </div>
+    </a>
+    <a href="https://github.com/Hiemdall/productos_comercial.git" target="_blank" class="proj-row" data-label="Ver proyecto">
+      <div class="proj-num">05</div>
+      <div class="proj-body">
+        <div class="proj-category">Comercio · Catálogo</div>
+        <div class="proj-title">Productos Comercial</div>
+        <div class="proj-desc">Sistema de catálogo de productos con interfaz intuitiva y gestión de inventario.</div>
+      </div>
+      <div class="proj-meta">
+        <div class="proj-tags"><span class="proj-tag">HTML</span><span class="proj-tag">CSS</span><span class="proj-tag">JS</span></div>
+        <span class="proj-arrow">↗</span>
+      </div>
+    </a>
+    <a href="https://github.com/Hiemdall/Bingo_administrador.git" target="_blank" class="proj-row" data-label="Ver proyecto">
+      <div class="proj-num">06</div>
+      <div class="proj-body">
+        <div class="proj-category">Gaming · Administración</div>
+        <div class="proj-title">Bingo Administrador</div>
+        <div class="proj-desc">Panel administrativo completo para gestión de juego de bingo con control en tiempo real.</div>
+      </div>
+      <div class="proj-meta">
+        <div class="proj-tags"><span class="proj-tag">JS</span><span class="proj-tag">Bootstrap</span></div>
+        <span class="proj-arrow">↗</span>
+      </div>
+    </a>
+    <a href="https://github.com/Hiemdall/sistema_base.git" target="_blank" class="proj-row" data-label="Ver proyecto">
+      <div class="proj-num">07</div>
+      <div class="proj-body">
+        <div class="proj-category">Arquitectura · Sistema</div>
+        <div class="proj-title">Sistema Base</div>
+        <div class="proj-desc">Arquitectura base modular y escalable para gestión de datos y lógica de negocio.</div>
+      </div>
+      <div class="proj-meta">
+        <div class="proj-tags"><span class="proj-tag">JS</span><span class="proj-tag">CSS</span></div>
+        <span class="proj-arrow">↗</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certs" class="section">
+  <div class="s-label rv">04 — Certificaciones</div>
+  <h2 class="s-title rv rv-d1">Formación<br><em>validada</em></h2>
+  <div class="certs-grid">
+    <div class="cert-card rv rv-d1">
+      <div class="cert-top"><div class="cert-icon">🌐</div><div class="cert-meta"><div class="cert-num">CERT — 01</div><div class="cert-name">HTML5 Fundamentals</div></div></div>
+      <div class="cert-desc">Etiquetas semánticas, atributos, estructura de página y estándares modernos del lenguaje de marcado web.</div>
+    </div>
+    <div class="cert-card rv rv-d2">
+      <div class="cert-top"><div class="cert-icon">🎨</div><div class="cert-meta"><div class="cert-num">CERT — 02</div><div class="cert-name">CSS3 Profesional</div></div></div>
+      <div class="cert-desc">Selectores avanzados, propiedades, diseños responsivos y estilización profesional de interfaces modernas.</div>
+    </div>
+    <div class="cert-card rv rv-d3">
+      <div class="cert-top"><div class="cert-icon">⚡</div><div class="cert-meta"><div class="cert-num">CERT — 03</div><div class="cert-name">JavaScript Esencial</div></div></div>
+      <div class="cert-desc">Variables, funciones, condicionales, bucles, DOM, eventos y programación asíncrona con AJAX.</div>
+    </div>
+    <div class="cert-card rv rv-d4">
+      <div class="cert-top"><div class="cert-icon">🅱️</div><div class="cert-meta"><div class="cert-num">CERT — 04</div><div class="cert-name">Bootstrap Framework</div></div></div>
+      <div class="cert-desc">Desarrollo de interfaces responsivas con el framework UI más utilizado del ecosistema web global.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <span class="contact-pre rv">¿Tienes un proyecto?</span>
+    <div class="contact-big rv rv-d1">HABLEMOS<br><em>HOY</em></div>
+    <p class="contact-sub rv rv-d2">Estoy disponible para proyectos freelance, colaboraciones y nuevas oportunidades. Respondo en menos de 24 horas.</p>
+    <div class="contact-links rv rv-d3">
+      <a href="https://api.whatsapp.com/send?phone=3161411928" target="_blank" class="cl cl-primary">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </a>
+      <a href="https://github.com/Magister0003" target="_blank" class="cl cl-outline">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-left">© 2025 Denyer Bastidas · Construido con 💜 y mucho café</div>
+  <div class="f-right">
+    <a href="#hero" class="f-link">Inicio</a>
+    <a href="#about" class="f-link">Sobre mí</a>
+    <a href="#projects" class="f-link">Proyectos</a>
+    <a href="#contact" class="f-link">Contacto</a>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
